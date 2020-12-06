@@ -87,7 +87,7 @@ function pad(value) {
 }
 
 const newCountdownTimer = new CountdownTimer({
-  selector: '#timer-1',
+  selector: '#timer-2',
   targetDate: Date.parse(refs.myCalenadr.value),
 });
 
