@@ -18,31 +18,33 @@ const fp = flatpickr(refs.myCalenadr, {
   dateFormat: 'Y-m-d H:i',
 }); // flatpickr
 
-let intervalId = null;
-
 class CountdownTimer {
   constructor(expiredDate) {
     this.expiredDate = expiredDate.targetDate;
     this.isActive = false;
-    // this.intervalId = intervalId;
+    this.intervalId = null;
   }
 
   register() {
     const that = this;
-    refs.buttonStartRef.addEventListener('click', that.start);
-  }
-
-  registered() {
-    refs.buttonStopRef.addEventListener('click', this.stop);
+    refs.buttonStartRef.addEventListener(
+      'click',
+      that.start.bind(CountdownTimer),
+    );
+    refs.buttonStopRef.addEventListener(
+      'click',
+      that.stop.bind(CountdownTimer),
+    );
   }
 
   start() {
+    // console.log(this);
     if (this.isActive) {
       return;
     }
     this.isActive = true;
 
-    intervalId = setInterval(() => {
+    this.intervalId = setInterval(() => {
       const currentTime = Date.now();
       const endTime = Date.parse(refs.myCalenadr.value);
       const deltaTime = endTime - currentTime;
@@ -58,8 +60,9 @@ class CountdownTimer {
   }
 
   stop() {
-    // console.log('click');
-    clearInterval(intervalId);
+    // console.log(this);
+    clearInterval(this.intervalId);
+    // console.log(this.intervalId);
     this.intervalId = null;
     this.isActive = false;
   }
@@ -89,4 +92,4 @@ const newCountdownTimer = new CountdownTimer({
 });
 
 newCountdownTimer.register();
-newCountdownTimer.registered();
+// newCountdownTimer.registered();

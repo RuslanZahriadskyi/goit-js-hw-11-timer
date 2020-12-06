@@ -20,6 +20,7 @@ const timer = {
   isActive: false,
   intervalId: null,
   start() {
+    // console.log(this);
     if (this.isActive) {
       return;
     }
@@ -38,8 +39,8 @@ const timer = {
       updateClockFace(deltaTime);
     }, 1000);
   },
-
   stop() {
+    // console.log(this);
     clearInterval(this.intervalId);
     this.intervalId = null;
     this.isActive = false;
