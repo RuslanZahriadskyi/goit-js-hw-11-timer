@@ -68,9 +68,9 @@ function pad(value) {
   return String(value).padStart(2, '0');
 }
 
-const test = new CountdownTimer({
+const newCountdownTimer = new CountdownTimer({
   selector: '#timer-1',
   targetDate: Date.parse(refs.myCalenadr.value),
 });
 
-test.register();
+newCountdownTimer.register();
