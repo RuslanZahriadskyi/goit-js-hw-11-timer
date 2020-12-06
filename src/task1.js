@@ -10,10 +10,15 @@ const refs = {
 
 class CountdownTimer {
   constructor(expiredDate) {
-    this.expiredDate = Date.parse(expiredDate.targetDate);
-    console.log(this.expiredDate);
+    this.expiredDate = expiredDate.targetDate;
     this.isActive = false;
     this.intervalId = null;
+  }
+
+  register() {
+    // const that = this;
+    refs.buttonStartRef.addEventListener('click', this.start);
+    refs.buttonStopRef.addEventListener('click', this.stop);
   }
 
   start() {
@@ -21,10 +26,12 @@ class CountdownTimer {
       return;
     }
     this.isActive = true;
+
     this.intervalId = setInterval(() => {
       const currentTime = Date.now();
       const endTime = Date.parse(refs.myCalenadr.value);
       const deltaTime = endTime - currentTime;
+      console.log(deltaTime);
       if (deltaTime < 0) {
         refs.myCalenadr.value = '';
         clearInterval(this.intervalId);
@@ -40,8 +47,6 @@ class CountdownTimer {
     clearInterval(this.intervalId);
     this.intervalId = null;
     this.isActive = false;
-    updateClockFace(0);
-    refs.myCalenadr.value = '';
   }
 }
 
@@ -62,24 +67,10 @@ function updateClockFace(time) {
 function pad(value) {
   return String(value).padStart(2, '0');
 }
-// new CountdownTimer({
-//   selector: '#timer-1',
-//   targetDate: new Date('Jul 17, 2019'),
-// });
 
-refs.buttonStartRef.addEventListener('click', test);
-refs.buttonStartRef.addEventListener(
-  'click',
-  CountdownTimer.start.bind(CountdownTimer),
-);
-// refs.buttonStartRef.addEventListener(
-//   'click',
-//   CountdownTimer.start.bind(CountdownTimer),
-// );
+const test = new CountdownTimer({
+  selector: '#timer-1',
+  targetDate: Date.parse(refs.myCalenadr.value),
+});
 
-function test() {
-  new CountdownTimer({
-    selector: '#timer-1',
-    targetDate: new Date('Jul 17, 2021'),
-  });
-}
+test.register();

@@ -43,8 +43,8 @@ const timer = {
     clearInterval(this.intervalId);
     this.intervalId = null;
     this.isActive = false;
-    updateClockFace(0);
-    refs.myCalenadr.value = '';
+    console.dir(this.intervalId);
+    console.log(clearInterval(this.intervalId));
   },
 };
 
