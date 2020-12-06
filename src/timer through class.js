@@ -1,14 +1,16 @@
 import flatpickr from 'flatpickr';
-require('flatpickr/dist/themes/dark.css');
+require('flatpickr/dist/themes/material_green.css');
 
 const refs = {
-  daysRef: document.querySelector('[data-value = days]'),
-  hoursRef: document.querySelector('[data-value = hours]'),
-  minsRef: document.querySelector('[data-value = mins]'),
-  secsRef: document.querySelector('[data-value = secs]'),
-  myCalenadr: document.querySelector('[data-calendar]'),
-  buttonStartRef: document.querySelector('[data-purpose="start"]'),
-  buttonStopRef: document.querySelector('[data-purpose="stop"]'),
+  daysRef: document.querySelector('[data-value = days__through-сlass]'),
+  hoursRef: document.querySelector('[data-value = hours__through-сlass]'),
+  minsRef: document.querySelector('[data-value = mins__through-сlass]'),
+  secsRef: document.querySelector('[data-value = secs__through-сlass]'),
+  myCalenadr: document.querySelector('[data-calendar__through-сlass]'),
+  buttonStartRef: document.querySelector(
+    '[data-purpose="start__through-сlass"]',
+  ),
+  buttonStopRef: document.querySelector('[data-purpose="stop__through-сlass"]'),
 };
 
 const fp = flatpickr(refs.myCalenadr, {
@@ -16,15 +18,31 @@ const fp = flatpickr(refs.myCalenadr, {
   dateFormat: 'Y-m-d H:i',
 }); // flatpickr
 
-const timer = {
-  isActive: false,
-  intervalId: null,
+let intervalId = null;
+
+class CountdownTimer {
+  constructor(expiredDate) {
+    this.expiredDate = expiredDate.targetDate;
+    this.isActive = false;
+    // this.intervalId = intervalId;
+  }
+
+  register() {
+    const that = this;
+    refs.buttonStartRef.addEventListener('click', that.start);
+  }
+
+  registered() {
+    refs.buttonStopRef.addEventListener('click', this.stop);
+  }
+
   start() {
     if (this.isActive) {
       return;
     }
     this.isActive = true;
-    this.intervalId = setInterval(() => {
+
+    intervalId = setInterval(() => {
       const currentTime = Date.now();
       const endTime = Date.parse(refs.myCalenadr.value);
       const deltaTime = endTime - currentTime;
@@ -37,19 +55,15 @@ const timer = {
       }
       updateClockFace(deltaTime);
     }, 1000);
-  },
+  }
 
   stop() {
-    clearInterval(this.intervalId);
+    // console.log('click');
+    clearInterval(intervalId);
     this.intervalId = null;
     this.isActive = false;
-    console.dir(this.intervalId);
-    console.log(clearInterval(this.intervalId));
-  },
-};
-
-refs.buttonStartRef.addEventListener('click', timer.start.bind(timer));
-refs.buttonStopRef.addEventListener('click', timer.stop.bind(timer));
+  }
+}
 
 function updateClockFace(time) {
   const days = pad(Math.floor(time / (1000 * 60 * 60 * 24)));
@@ -68,3 +82,11 @@ function updateClockFace(time) {
 function pad(value) {
   return String(value).padStart(2, '0');
 }
+
+const newCountdownTimer = new CountdownTimer({
+  selector: '#timer-1',
+  targetDate: Date.parse(refs.myCalenadr.value),
+});
+
+newCountdownTimer.register();
+newCountdownTimer.registered();

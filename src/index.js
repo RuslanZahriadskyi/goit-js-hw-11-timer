@@ -1,3 +1,3 @@
 import './styles.css';
-import './task';
-import './task1';
+import './timer';
+import './timer through class';
