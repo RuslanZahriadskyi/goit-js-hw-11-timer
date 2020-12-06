@@ -1,12 +1,22 @@
+import flatpickr from 'flatpickr';
+require('flatpickr/dist/themes/material_green.css');
+
 const refs = {
-  daysRef: document.querySelector('[data-value = days]'),
-  hoursRef: document.querySelector('[data-value = hours]'),
-  minsRef: document.querySelector('[data-value = mins]'),
-  secsRef: document.querySelector('[data-value = secs]'),
-  myCalenadr: document.querySelector('[data-calendar]'),
-  buttonStartRef: document.querySelector('[data-purpose="start"]'),
-  buttonStopRef: document.querySelector('[data-purpose="stop"]'),
+  daysRef: document.querySelector('[data-value = days__through-сlass]'),
+  hoursRef: document.querySelector('[data-value = hours__through-сlass]'),
+  minsRef: document.querySelector('[data-value = mins__through-сlass]'),
+  secsRef: document.querySelector('[data-value = secs__through-сlass]'),
+  myCalenadr: document.querySelector('[data-calendar__through-сlass]'),
+  buttonStartRef: document.querySelector(
+    '[data-purpose="start__through-сlass"]',
+  ),
+  buttonStopRef: document.querySelector('[data-purpose="stop__through-сlass"]'),
 };
+
+const fp = flatpickr(refs.myCalenadr, {
+  enableTime: true,
+  dateFormat: 'Y-m-d H:i',
+}); // flatpickr
 
 class CountdownTimer {
   constructor(expiredDate) {
@@ -16,9 +26,9 @@ class CountdownTimer {
   }
 
   register() {
-    // const that = this;
-    refs.buttonStartRef.addEventListener('click', this.start);
-    refs.buttonStopRef.addEventListener('click', this.stop);
+    const that = this;
+    refs.buttonStartRef.addEventListener('click', that.start);
+    refs.buttonStopRef.addEventListener('click', that.stop);
   }
 
   start() {

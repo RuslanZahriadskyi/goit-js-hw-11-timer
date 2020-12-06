@@ -43,6 +43,7 @@ h1 {
 }
 
 .field {
+  margin-bottom: 50px;
   padding: 10px;
   border-radius: 3px;
   background: #00bf96;
@@ -57,6 +58,34 @@ h1 {
 }
 
 .label {
+  padding-top: 5px;
+  font-size: 16px;
+}
+
+#timer-2 {
+  font-family: sans-serif;
+  color: #fff;
+  display: inline-block;
+  font-weight: 100;
+  text-align: center;
+  font-size: 30px;
+}
+
+.field__through-сlass {
+  padding: 10px;
+  border-radius: 3px;
+  background: #00bf96;
+  display: inline-block;
+}
+
+.value__through-сlass {
+  display: flex;
+  padding: 15px;
+  border-radius: 3px;
+  background: #00816a;
+}
+
+.label__through-сlass {
   padding-top: 5px;
   font-size: 16px;
 }
