@@ -19,28 +19,27 @@ const fp = flatpickr(refs.myCalenadr, {
 const timer = {
   isActive: false,
   intervalId: null,
+
+  date: new Date(),
   start() {
-    // console.log(this);
+    this.date = new Date(refs.myCalenadr.value);
+    if (this.date < new Date()) {
+      refs.myCalenadr.value = '';
+      clearInterval(this.intervalId);
+      updateClockFace();
+      alert('Установленная дата меньше текущей');
+      return;
+    }
     if (this.isActive) {
       return;
     }
+    updateClockFace();
     this.isActive = true;
     this.intervalId = setInterval(() => {
-      const currentTime = Date.now();
-      const endTime = Date.parse(refs.myCalenadr.value);
-      const deltaTime = endTime - currentTime;
-      if (deltaTime < 0) {
-        refs.myCalenadr.value = '';
-        clearInterval(this.intervalId);
-        updateClockFace(0);
-        alert('Установленная дата меньше текущей');
-        return;
-      }
-      updateClockFace(deltaTime);
+      updateClockFace();
     }, 1000);
   },
   stop() {
-    // console.log(this);
     clearInterval(this.intervalId);
     this.intervalId = null;
     this.isActive = false;
@@ -50,7 +49,9 @@ const timer = {
 refs.buttonStartRef.addEventListener('click', timer.start.bind(timer));
 refs.buttonStopRef.addEventListener('click', timer.stop.bind(timer));
 
-function updateClockFace(time) {
+function updateClockFace() {
+  const time = timer.date - new Date();
+
   const days = pad(Math.floor(time / (1000 * 60 * 60 * 24)));
   const hours = pad(
     Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),

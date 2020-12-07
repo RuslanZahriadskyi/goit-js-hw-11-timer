@@ -23,63 +23,57 @@ class CountdownTimer {
     this.expiredDate = expiredDate.targetDate;
     this.isActive = false;
     this.intervalId = null;
+    this.date = new Date();
   }
 
   register() {
-    const that = this;
-    refs.buttonStartRef.addEventListener(
-      'click',
-      that.start.bind(CountdownTimer),
-    );
-    refs.buttonStopRef.addEventListener(
-      'click',
-      that.stop.bind(CountdownTimer),
-    );
+    refs.buttonStartRef.addEventListener('click', this.start.bind(this));
+    refs.buttonStopRef.addEventListener('click', this.stop.bind(this));
   }
 
   start() {
-    // console.log(this);
+    this.date = new Date(refs.myCalenadr.value);
+
     if (this.isActive) {
       return;
     }
+
+    if (this.date < new Date()) {
+      refs.myCalenadr.value = '';
+      clearInterval(this.intervalId);
+      this.updateClockFace();
+      alert('Установленная дата меньше текущей');
+      return;
+    }
+    this.updateClockFace();
     this.isActive = true;
 
     this.intervalId = setInterval(() => {
-      const currentTime = Date.now();
-      const endTime = Date.parse(refs.myCalenadr.value);
-      const deltaTime = endTime - currentTime;
-      if (deltaTime < 0) {
-        refs.myCalenadr.value = '';
-        clearInterval(this.intervalId);
-        updateClockFace(0);
-        alert('Установленная дата меньше текущей');
-        return;
-      }
-      updateClockFace(deltaTime);
+      this.updateClockFace();
     }, 1000);
   }
 
   stop() {
-    // console.log(this);
     clearInterval(this.intervalId);
-    // console.log(this.intervalId);
     this.intervalId = null;
     this.isActive = false;
   }
-}
 
-function updateClockFace(time) {
-  const days = pad(Math.floor(time / (1000 * 60 * 60 * 24)));
-  const hours = pad(
-    Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-  );
-  const mins = pad(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)));
-  const secs = pad(Math.floor((time % (1000 * 60)) / 1000));
+  updateClockFace() {
+    const time = this.date - new Date();
 
-  refs.daysRef.textContent = `${days}`;
-  refs.hoursRef.textContent = `${hours}`;
-  refs.minsRef.textContent = `${mins}`;
-  refs.secsRef.textContent = `${secs}`;
+    const days = pad(Math.floor(time / (1000 * 60 * 60 * 24)));
+    const hours = pad(
+      Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+    );
+    const mins = pad(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)));
+    const secs = pad(Math.floor((time % (1000 * 60)) / 1000));
+
+    refs.daysRef.textContent = `${days}`;
+    refs.hoursRef.textContent = `${hours}`;
+    refs.minsRef.textContent = `${mins}`;
+    refs.secsRef.textContent = `${secs}`;
+  }
 }
 
 function pad(value) {
