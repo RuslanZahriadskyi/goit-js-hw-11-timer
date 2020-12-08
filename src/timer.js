@@ -26,7 +26,6 @@ const timer = {
     if (this.date < new Date()) {
       refs.myCalenadr.value = '';
       clearInterval(this.intervalId);
-      updateClockFace();
       alert('Установленная дата меньше текущей');
       return;
     }
