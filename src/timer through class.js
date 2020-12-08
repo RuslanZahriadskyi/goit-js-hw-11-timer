@@ -80,10 +80,10 @@ function pad(value) {
   return String(value).padStart(2, '0');
 }
 
-const newCountdownTimer = new CountdownTimer({
-  selector: '#timer-2',
-  targetDate: Date.parse(refs.myCalenadr.value),
-});
+// const newCountdownTimer = new CountdownTimer({
+//   selector: '#timer-2',
+//   targetDate: Date.parse(refs.myCalenadr.value),
+// });
 
-newCountdownTimer.register();
+// newCountdownTimer.register();
 // newCountdownTimer.registered();
