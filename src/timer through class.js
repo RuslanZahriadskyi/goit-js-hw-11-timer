@@ -19,20 +19,24 @@ const fp = flatpickr(refs.myCalenadr, {
 }); // flatpickr
 
 class CountdownTimer {
-  constructor(expiredDate) {
-    this.expiredDate = expiredDate.targetDate;
+  constructor(calendarValue, daysCount, hoursCount, minsCount, secsCount) {
+    this.calendarValue = calendarValue;
     this.isActive = false;
     this.intervalId = null;
     this.date = new Date();
+    this.days = daysCount;
+    this.hours = hoursCount;
+    this.mins = minsCount;
+    this.secs = secsCount;
   }
 
-  register() {
-    refs.buttonStartRef.addEventListener('click', this.start.bind(this));
-    refs.buttonStopRef.addEventListener('click', this.stop.bind(this));
+  register(start, stop) {
+    start.addEventListener('click', this.start.bind(this));
+    stop.addEventListener('click', this.stop.bind(this));
   }
 
   start() {
-    this.date = new Date(refs.myCalenadr.value);
+    this.date = new Date(this.calendarValue.value);
 
     if (this.isActive) {
       return;
@@ -68,10 +72,14 @@ class CountdownTimer {
     const mins = pad(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)));
     const secs = pad(Math.floor((time % (1000 * 60)) / 1000));
 
-    refs.daysRef.textContent = `${days}`;
-    refs.hoursRef.textContent = `${hours}`;
-    refs.minsRef.textContent = `${mins}`;
-    refs.secsRef.textContent = `${secs}`;
+    this.render(days, hours, mins, secs);
+  }
+
+  render(renderDays, renderHours, renderMins, renderSecs) {
+    this.days.textContent = `${renderDays}`;
+    this.hours.textContent = `${renderHours}`;
+    this.mins.textContent = `${renderMins}`;
+    this.secs.textContent = `${renderSecs}`;
   }
 }
 
@@ -79,10 +87,12 @@ function pad(value) {
   return String(value).padStart(2, '0');
 }
 
-const newCountdownTimer = new CountdownTimer({
-  selector: '#timer-2',
-  targetDate: Date.parse(refs.myCalenadr.value),
-});
+const newCountdownTimer = new CountdownTimer(
+  refs.myCalenadr,
+  refs.daysRef,
+  refs.hoursRef,
+  refs.minsRef,
+  refs.secsRef,
+);
 
-newCountdownTimer.register();
-// newCountdownTimer.registered();
+newCountdownTimer.register(refs.buttonStartRef, refs.buttonStopRef);
